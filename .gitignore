@@ -16,3 +16,15 @@ classes/**
 
 # emacs
 *~
+
+# generated javadoc
+javadoc/**
+
+*.jar
+*.pdf
+.sts4-cache/
+target/
+backup_4.2.0_baseline/*
+
+
+
