@@ -96,23 +96,23 @@ public class StanfordCoreNLPServer implements Runnable {
 
   private final Properties serverIOProps;
 
-  private final Properties defaultProps;
+  protected final Properties defaultProps;
 
   /**
    * The thread pool for the HTTP server.
    */
-  private final ExecutorService serverExecutor;
+  protected final ExecutorService serverExecutor;
 
   /**
    * To prevent grossly wasteful over-creation of pipeline objects, cache the last
    *  one we created.
    */
-  private SoftReference<Pair<String, StanfordCoreNLP>> lastPipeline = new SoftReference<>(null);
+  protected SoftReference<Pair<String, StanfordCoreNLP>> lastPipeline = new SoftReference<>(null);
 
   /**
    * An executor to time out CoreNLP execution with.
    */
-  private final ExecutorService corenlpExecutor;
+  protected final ExecutorService corenlpExecutor;
 
 
   /**
@@ -294,7 +294,7 @@ public class StanfordCoreNLPServer implements Runnable {
    * @throws IOException Thrown if we cannot read the POST data.
    * @throws ClassNotFoundException Thrown if we cannot load the serializer.
    */
-  private Annotation getDocument(Properties props, HttpExchange httpExchange) throws IOException, ClassNotFoundException {
+  protected Annotation getDocument(Properties props, HttpExchange httpExchange) throws IOException, ClassNotFoundException {
     String inputFormat = props.getProperty("inputFormat", "text");
     String date = props.getProperty("date");
     switch (inputFormat) {
@@ -355,7 +355,7 @@ public class StanfordCoreNLPServer implements Runnable {
    * @param props The properties to create the object with.
    * @return A pipeline parameterized by these properties.
    */
-  private StanfordCoreNLP mkStanfordCoreNLP(Properties props) {
+  protected StanfordCoreNLP mkStanfordCoreNLP(Properties props) {
     StanfordCoreNLP impl;
 
     StringBuilder sb = new StringBuilder();
@@ -399,7 +399,7 @@ public class StanfordCoreNLPServer implements Runnable {
    *
    * @throws UnsupportedEncodingException Thrown if we could not decode the key/value pairs with UTF-8.
    */
-  private Properties getProperties(HttpExchange httpExchange) throws UnsupportedEncodingException {
+  protected Properties getProperties(HttpExchange httpExchange) throws UnsupportedEncodingException {
     Map<String, String> urlParams = getURLParams(httpExchange.getRequestURI());
 
     // Load the default properties if resetDefault is false
@@ -487,7 +487,7 @@ public class StanfordCoreNLPServer implements Runnable {
    *
    * @throws IOException Thrown if the HttpExchange cannot communicate the error.
    */
-  private static void respondError(String response, HttpExchange httpExchange) throws IOException {
+  protected static void respondError(String response, HttpExchange httpExchange) throws IOException {
     httpExchange.getResponseHeaders().add("Content-type", "text/plain");
     httpExchange.sendResponseHeaders(HTTP_INTERNAL_ERROR, response.length());
     httpExchange.getResponseBody().write(response.getBytes());
@@ -503,7 +503,7 @@ public class StanfordCoreNLPServer implements Runnable {
    *
    * @throws IOException Thrown if the HttpExchange cannot communicate the error.
    */
-  private static void respondBadInput(String response, HttpExchange httpExchange) throws IOException {
+  protected static void respondBadInput(String response, HttpExchange httpExchange) throws IOException {
     httpExchange.getResponseHeaders().add("Content-type", "text/plain");
     httpExchange.sendResponseHeaders(HTTP_BAD_REQUEST, response.length());
     httpExchange.getResponseBody().write(response.getBytes());
@@ -519,7 +519,7 @@ public class StanfordCoreNLPServer implements Runnable {
    *
    * @throws IOException Thrown if the HttpExchange cannot communicate the error.
    */
-  private static void respondUnauthorized(HttpExchange httpExchange) throws IOException {
+  protected static void respondUnauthorized(HttpExchange httpExchange) throws IOException {
     log("Responding unauthorized to " + httpExchange.getRemoteAddress());
     httpExchange.getResponseHeaders().add("Content-type", "application/javascript");
     byte[] content = "{\"message\": \"Unauthorized API request\"}".getBytes(StandardCharsets.UTF_8);
@@ -528,7 +528,7 @@ public class StanfordCoreNLPServer implements Runnable {
     httpExchange.close();
   }
 
-  private static void setHttpExchangeResponseHeaders(HttpExchange httpExchange) {
+  protected static void setHttpExchangeResponseHeaders(HttpExchange httpExchange) {
     // Set common response headers
     httpExchange.getResponseHeaders().add("Access-Control-Allow-Origin", "*");
     httpExchange.getResponseHeaders().add("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
@@ -595,7 +595,7 @@ public class StanfordCoreNLPServer implements Runnable {
   }
 
   /** @see #onBlockList(Inet4Address) */
-  private boolean onBlockList(HttpExchange exchange) {
+  protected boolean onBlockList(HttpExchange exchange) {
     if ( ! stanford) {
       return false;
     }
@@ -807,15 +807,15 @@ public class StanfordCoreNLPServer implements Runnable {
     /**
      * An authenticator to determine if we can perform this API request.
      */
-    private final Predicate<Properties> authenticator;
+    protected final Predicate<Properties> authenticator;
 
     /**
      * A callback to call when an annotation job has finished.
      */
-    private final Consumer<FinishedRequest> callback;
+    protected final Consumer<FinishedRequest> callback;
 
 
-    private final FileHandler homepage;
+    protected final FileHandler homepage;
 
     /**
      * Create a handler for accepting annotation requests.
@@ -1402,7 +1402,7 @@ public class StanfordCoreNLPServer implements Runnable {
   }
 
 
-  private static HttpsServer addSSLContext(HttpsServer server) {
+  protected static HttpsServer addSSLContext(HttpsServer server) {
     log("Adding SSL context to server; key=" + StanfordCoreNLPServer.key);
     try (InputStream is = IOUtils.getInputStreamFromURLOrClasspathOrFileSystem(key)) {
       KeyStore ks = KeyStore.getInstance("JKS");
@@ -1445,7 +1445,7 @@ public class StanfordCoreNLPServer implements Runnable {
    * @param live The boolean to track when CoreNLP has initialized and the server is ready
    *             to serve requests.
    */
-  private void livenessServer(AtomicBoolean live) {
+  protected void livenessServer(AtomicBoolean live) {
     if (this.serverPort != this.statusPort) {
       try {
         // Create the server
@@ -1499,7 +1499,7 @@ public class StanfordCoreNLPServer implements Runnable {
    * @param credentials The optional credentials to enforce. This is a (key,value) pair
    */
   @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
-  private static void withAuth(HttpContext context, Optional<Pair<String,String>> credentials) {
+  protected static void withAuth(HttpContext context, Optional<Pair<String,String>> credentials) {
     credentials.ifPresent(c -> context.setAuthenticator(new BasicAuthenticator("corenlp") {
       @Override
       public boolean checkCredentials(String user, String pwd) {
