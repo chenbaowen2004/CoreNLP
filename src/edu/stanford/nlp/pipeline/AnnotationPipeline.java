@@ -73,6 +73,11 @@ public class AnnotationPipeline implements Annotator {
       if (TIME) {
         t.start();
       }
+      /*
+       * D202103/19 CHENBAOWEN ADD
+       */
+      log.info("*************** Executing " +  annotator.toString() + " **************************");
+      //END....
       annotator.annotate(annotation);
       if (TIME) {
         long elapsed = t.stop();

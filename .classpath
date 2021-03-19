@@ -8,9 +8,9 @@
 	</classpathentry>
 	<classpathentry kind="src" output="target/test-classes" path="test/src">
 		<attributes>
+			<attribute name="test" value="true"/>
 			<attribute name="optional" value="true"/>
 			<attribute name="maven.pomderived" value="true"/>
-			<attribute name="test" value="true"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="src" path="itest/src"/>
@@ -43,7 +43,6 @@
 	<classpathentry exported="true" kind="lib" path="lib/lucene-analyzers-common-7.5.0.jar" sourcepath="lucene-analyzers-common-7.5.0-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/lucene-queryparser-7.5.0.jar" sourcepath="lucene-queryparser-7.5.0-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/slf4j-api.jar" sourcepath="libsrc/slf4j-api-1.7.12-sources.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/slf4j-simple.jar" sourcepath="libsrc/slf4j-simple-1.7.12-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/javax.activation-api-1.2.0.jar" sourcepath="libsrc/javax.activation-api-1.2.0-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jaxb-api-2.4.0-b180830.0359.jar" sourcepath="libsrc/jaxb-api-2.4.0-b180830.0359-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jaxb-core-2.3.0.1.jar" sourcepath="libsrc/jaxb-core-2.3.0.1-sources.jar"/>
