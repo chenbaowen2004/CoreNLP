@@ -1,0 +1,33 @@
+*.pyc
+*.swp
+*.swo
+*.o
+*.so
+.DS_Store
+.settings/**
+.classpath
+.project
+.settings/
+
+# stuff gets built here
+classes/**
+
+# IntelliJ IDEA
+*.eml
+*.iml
+.idea/**
+
+# emacs
+*~
+
+# generated javadoc
+javadoc/**
+
+*.jar
+*.pdf
+.sts4-cache/
+target/
+backup_4.2.0_baseline/*
+
+
+

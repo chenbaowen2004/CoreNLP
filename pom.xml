@@ -202,7 +202,7 @@
             <configuration>
               <artifacts>
                 <artifact>
-                  <file>${project.basedir}/stanford-corenlp-4.2.0-models.jar</file>
+                  <file>${project.basedir}/backup_4.2.0_baseline/stanford-corenlp-4.2.0/stanford-corenlp-4.2.0-models.jar</file>
                   <type>jar</type>
                   <classifier>models</classifier>
                 </artifact>
