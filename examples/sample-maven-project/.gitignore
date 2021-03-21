@@ -28,6 +28,7 @@ javadoc/**
 .sts4-cache/
 target/
 backup_4.2.0_baseline/*
+logs/
 
 
 
