@@ -94,7 +94,7 @@ public class StanfordCoreNLPServer implements Runnable {
 
   private final String shutdownKey;
 
-  private final Properties serverIOProps;
+  protected final Properties serverIOProps;
 
   protected final Properties defaultProps;
 
@@ -252,11 +252,22 @@ public class StanfordCoreNLPServer implements Runnable {
    *
    * @throws UnsupportedEncodingException Thrown if we could not decode the URL with utf8.
    */
-  private static Map<String, String> getURLParams(URI uri) throws UnsupportedEncodingException {
+  protected static Map<String, String> getURLParams(URI uri) throws UnsupportedEncodingException {
     String query = uri.getRawQuery();
     if (query != null) {
       try {
         Map<String, String> params = new HashMap<>();
+        /*
+         * D202103/12 CHENBAOWEN CHANGW.
+         * because requested url paramns maybe encode &, so add it...
+         * for example:
+         * /?properties=%7b%22annotators%22%3a%22tokenize%2cssplit%2cpos%2clemma%2cner%2cparse%2cdepparse%2cdcoref%22%2c%22outputFormat%22%3a%22xml%22%7d%26date%3d%26orgId%3dcyberobject%26appId%3dwmx_workspace 
+         */
+		if (query.indexOf("%26") > 0) {
+			query = URLDecoder.decode(query, "UTF-8");
+		}
+		//END....
+		
         for (String param : query.split("&")) {
           String[] keyValue = param.split("=", 2);
           String key = URLDecoder.decode(keyValue[0], "UTF-8");
