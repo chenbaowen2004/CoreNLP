@@ -31,8 +31,8 @@ public class AnnotationPipeline implements Annotator {
 
   protected static final boolean TIME = true;
 
-  private final List<Annotator> annotators;
-  private List<MutableLong> accumulatedTime;
+  protected final List<Annotator> annotators;
+  protected List<MutableLong> accumulatedTime;
 
   public AnnotationPipeline(List<Annotator> annotators) {
     this.annotators = annotators;
@@ -72,13 +72,8 @@ public class AnnotationPipeline implements Annotator {
       }
       if (TIME) {
         t.start();
-      }
-      /*
-       * D202103/19 CHENBAOWEN ADD
-       */
-      log.info("*************** Executing " +  annotator.toString() + " **************************");
-      //END....
-      annotator.annotate(annotation);
+      }      
+      annotator.annotate(annotation);     
       if (TIME) {
         long elapsed = t.stop();
         MutableLong m = it.next();

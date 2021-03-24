@@ -101,6 +101,11 @@ public class StanfordCoreNLP extends AnnotationPipeline  {
       default: throw new IllegalArgumentException("Unknown output format " + outputFormat);
     }
   }
+  
+  /*(D2021/03/24. chenbaowen addd.
+   * 
+   */
+  protected Map<String,String> coAnnotatorClassnameMapping = new ConcurrentHashMap<String,String>();
 
 
   /**
@@ -252,6 +257,9 @@ public class StanfordCoreNLP extends AnnotationPipeline  {
 
       Annotator an = pool.get(name);
       this.addAnnotator(an);
+      
+      //chenbaowen add...
+      coAnnotatorClassnameMapping.put(an.getClass().getName(), name);
 
       if (enforceRequirements) {
         Set<Class<? extends CoreAnnotation>> allRequirements = an.requires();
