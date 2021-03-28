@@ -164,7 +164,7 @@ public class StanfordCoreNLP extends AnnotationPipeline  {
   private static final Redwood.RedwoodChannels logger = Redwood.channels(StanfordCoreNLP.class);
 
   /** Stores the overall number of words processed. */
-  private int numWords;
+  protected int numWords;
 
   /** Stores the time (in milliseconds) required to construct the pipeline, for later statistics reporting. */
   private final long pipelineSetupTime;
