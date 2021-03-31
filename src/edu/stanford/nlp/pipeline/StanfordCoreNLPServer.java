@@ -90,9 +90,9 @@ public class StanfordCoreNLPServer implements Runnable {
   protected boolean stanford = false;
 
   /** List of server specific properties **/
-  private static final List<String> serverSpecificProperties = ArgumentParser.listOptions(StanfordCoreNLPServer.class);
+  protected static final List<String> serverSpecificProperties = ArgumentParser.listOptions(StanfordCoreNLPServer.class);
 
-  private final String shutdownKey;
+  protected final String shutdownKey;
 
   protected final Properties serverIOProps;
 
@@ -118,7 +118,7 @@ public class StanfordCoreNLPServer implements Runnable {
   /**
    * A list of blocked subnets -- these cannot call the server.
    */
-  private final List<Pair<Inet4Address, Integer>> blockListSubnets;
+  protected final List<Pair<Inet4Address, Integer>> blockListSubnets;
 
 
   /**
@@ -552,7 +552,7 @@ public class StanfordCoreNLPServer implements Runnable {
   /**
    * Adapted from: https://stackoverflow.com/questions/4209760/validate-an-ip-address-with-mask
    */
-  private static Pair<Inet4Address, Integer> parseSubnet(String subnet) {
+  protected static Pair<Inet4Address, Integer> parseSubnet(String subnet) {
     String[] parts = subnet.split("/");
     String ip = parts[0];
     int prefix;
@@ -574,7 +574,7 @@ public class StanfordCoreNLPServer implements Runnable {
    * Adapted from: https://stackoverflow.com/questions/4209760/validate-an-ip-address-with-mask
    */
   @SuppressWarnings("PointlessBitwiseExpression")
-  private static boolean netMatch(Pair<Inet4Address, Integer> subnet, Inet4Address addr ){
+  protected static boolean netMatch(Pair<Inet4Address, Integer> subnet, Inet4Address addr ){
     byte[] b = subnet.first.getAddress();
     int ipInt = ((b[0] & 0xFF) << 24) |
         ((b[1] & 0xFF) << 16) |
@@ -596,7 +596,7 @@ public class StanfordCoreNLPServer implements Runnable {
    *
    * @return True if the address is <b>not</b> in any forbidden subnet. That is, we can accept connections from it.
    */
-  private boolean onBlockList(Inet4Address addr) {
+  protected boolean onBlockList(Inet4Address addr) {
     for (Pair<Inet4Address, Integer> subnet : blockListSubnets) {
       if (netMatch(subnet, addr)) {
         return true;
@@ -747,8 +747,8 @@ public class StanfordCoreNLPServer implements Runnable {
    * Serve a file from the filesystem or classpath
    */
   public static class FileHandler implements HttpHandler {
-    private final String content;
-    private final String contentType;
+	protected final String content;
+	protected final String contentType;
     public FileHandler(String fileOrClasspath) throws IOException {
       this(fileOrClasspath, "text/html");
     }
@@ -770,7 +770,7 @@ public class StanfordCoreNLPServer implements Runnable {
     }
   } // end static class FileHandler
 
-  private int maybeAlterStanfordTimeout(HttpExchange httpExchange, int timeoutMilliseconds) {
+  protected int maybeAlterStanfordTimeout(HttpExchange httpExchange, int timeoutMilliseconds) {
     if ( ! stanford) {
       return timeoutMilliseconds;
     }
@@ -989,12 +989,12 @@ public class StanfordCoreNLPServer implements Runnable {
     /**
      * A callback to call when an annotation job has finished.
      */
-    private final Consumer<FinishedRequest> callback;
+	  protected final Consumer<FinishedRequest> callback;
 
     /**
      * An authenticator to determine if we can perform this API request.
      */
-    private final Predicate<Properties> authenticator;
+	  protected final Predicate<Properties> authenticator;
 
     /**
      * Create a new TokensRegex Handler.
@@ -1117,12 +1117,12 @@ public class StanfordCoreNLPServer implements Runnable {
     /**
      * A callback to call when an annotation job has finished.
      */
-    private final Consumer<FinishedRequest> callback;
+	  protected final Consumer<FinishedRequest> callback;
 
     /**
      * An authenticator to determine if we can perform this API request.
      */
-    private final Predicate<Properties> authenticator;
+	  protected final Predicate<Properties> authenticator;
 
     /**
      * Create a new Semgrex Handler.
@@ -1275,12 +1275,12 @@ public class StanfordCoreNLPServer implements Runnable {
     /**
      * A callback to call when an annotation job has finished.
      */
-    private final Consumer<FinishedRequest> callback;
+	  protected final Consumer<FinishedRequest> callback;
 
     /**
      * An authenticator to determine if we can perform this API request.
      */
-    private final Predicate<Properties> authenticator;
+	  protected final Predicate<Properties> authenticator;
 
     /**
      * Create a new Tregex Handler.
@@ -1402,7 +1402,7 @@ public class StanfordCoreNLPServer implements Runnable {
     }
   }
 
-  private static void sendAndGetResponse(HttpExchange httpExchange, byte[] response) throws IOException {
+  protected static void sendAndGetResponse(HttpExchange httpExchange, byte[] response) throws IOException {
     if (response.length > 0) {
       httpExchange.getResponseHeaders().add("Content-type", "application/json");
       httpExchange.getResponseHeaders().add("Content-length", Integer.toString(response.length));
